@@ -85,7 +85,7 @@ export default {
   mounted() {
     this.generator.bpm = this.tempo;
     this.generator.setOffset(1, this.shift / 100.0);
-    this.player.setTempoOscilation(this.oscilation);
+    this.player.setTempoOscilation(this.oscilation / 10.0);
   },
   methods: {
     onPlayClicked() {
