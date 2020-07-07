@@ -1,5 +1,7 @@
 <template>
-  <Player />
+  <div>
+    <Player />
+  </div>
 </template>
 
 <script>
@@ -10,3 +12,12 @@ export default {
   components: { Player },
 };
 </script>
+
+<style lang="scss" scoped>
+.pretty-background {
+  background-color: blue;
+  // min-height: 100%;
+  // min-width: 100%;
+  position: absolute;
+}
+</style>

@@ -38,12 +38,33 @@ const { VTabsItems } = require("vuetify/lib");
                     <span v-text="getOscilationStr()" />
                   </template>
                 </v-slider>
+                <v-row>
+                  <v-col
+                    class="text-center"
+                    v-for="beat in 3"
+                    :key="'beat' + beat"
+                  >
+                    <v-avatar
+                      :color="beat - 1 == currentBeat ? 'accent' : 'primary'"
+                      size="86"
+                    >
+                      <span class="display-3 font-weight-light"
+                        >{{ beat }}
+                      </span>
+                    </v-avatar>
+                  </v-col>
+                </v-row>
               </v-card-text>
             </v-card>
           </v-col>
         </v-row>
       </v-container>
     </v-main>
+    <v-bottom-navigation>
+      <v-card outlined color="rgb(0, 0, 0, 0)">
+        <v-card-text>Łukasz Nizik @ 2020</v-card-text>
+      </v-card>
+    </v-bottom-navigation>
   </v-app>
 </template>
 
@@ -58,6 +79,7 @@ export default {
       shift: -18,
       oscilation: 0,
       isPlaying: false,
+      currentBeat: -1,
     };
   },
   watch: {
@@ -86,6 +108,7 @@ export default {
     this.generator.bpm = this.tempo;
     this.generator.setOffset(1, this.shift / 100.0);
     this.player.setTempoOscilation(this.oscilation / 10.0);
+    this.player.setOnBeatChanged(this.onBeatChanged);
   },
   methods: {
     onPlayClicked() {
@@ -101,6 +124,11 @@ export default {
     },
     getOscilationValue() {
       return this.oscilation / 10.0;
+    },
+    onBeatChanged(beat) {
+      if (beat) {
+        this.currentBeat = beat.index;
+      }
     },
   },
 };
