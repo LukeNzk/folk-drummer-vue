@@ -1,5 +1,5 @@
 class AudioClip {
-  buffer: AudioBuffer;
+  buffer?: AudioBuffer;
 }
 
 class ClipProvider {

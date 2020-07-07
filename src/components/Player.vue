@@ -18,19 +18,14 @@ const { VTabsItems } = require("vuetify/lib");
                     <span class="subheading font-weight-light mr-1">BPM</span>
                   </v-col>
                   <v-col class="text-right">
-                    <v-btn color="primary" fab @click="onPlay">
-                      <v-icon large>{{
-                        isPlaying ? 'mdi-pause' : 'mdi-play'
-                      }}</v-icon>
+                    <v-btn color="primary" fab @click="onPlayClicked">
+                      <v-icon x-large>
+                        {{ isPlaying ? 'mdi-pause' : 'mdi-play' }}
+                      </v-icon>
                     </v-btn>
                   </v-col>
                 </v-row>
-                <v-slider
-                  v-model="tempo"
-                  min="60"
-                  max="360"
-                  @change="onTempoChanged"
-                ></v-slider>
+                <v-slider v-model="tempo" min="60" max="360"></v-slider>
 
                 <p>Podbicie</p>
                 <v-slider v-model="shift" min="-100" max="100">
@@ -65,6 +60,17 @@ export default {
       isPlaying: false,
     };
   },
+  watch: {
+    tempo: function(val) {
+      this.generator.bpm = val;
+    },
+    shift: function(val) {
+      this.generator.setOffset(1, val / 100.0);
+    },
+    oscilation: function(val) {
+      this.player.setTempoOscilation(val / 10.0);
+    },
+  },
   computed: {
     audioUtils() {
       return new AudioUtils();
@@ -76,18 +82,19 @@ export default {
       return this.player.generator;
     },
   },
+  mounted() {
+    this.generator.bpm = this.tempo;
+    this.generator.setOffset(1, this.shift / 100.0);
+    this.player.setTempoOscilation(this.oscilation);
+  },
   methods: {
-    onTempoChanged(val) {
-      this.generator.bpm = val;
-    },
-    onShiftChanged(val) {
-      this.generator.setOffset(val);
-    },
-    onOscilationChanged(val) {
-      this.generator.oscilation = val;
-    },
-    onPlay() {
+    onPlayClicked() {
       this.isPlaying = !this.isPlaying;
+      if (this.isPlaying) {
+        this.player.start();
+      } else {
+        this.player.stop();
+      }
     },
     getOscilationStr() {
       return this.getOscilationValue().toFixed(2);

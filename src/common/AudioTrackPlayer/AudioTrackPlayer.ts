@@ -1,14 +1,18 @@
-import AudioTrackGenerator from '../AudioTrackGenerator';
-import ClipProvider from '../ClipProvider';
-import { AudioClip } from '../ClipProvider';
+import AudioTrackGenerator from '@/common/AudioTrackGenerator';
+import ClipProvider from '@/common/ClipProvider';
+import { AudioClip } from '@/common/ClipProvider';
 import assets from '@/assets/sfx';
-import AudioUtils from '../AudioUtils'; // eslint-disable-line no-unused-vars
-import BeatInfo from '../AudioTrackGenerator/BeatInfo'; // eslint-disable-line no-unused-vars
+import AudioUtils from '@/common/AudioUtils'; // eslint-disable-line no-unused-vars
+import BeatInfo from '@/common/AudioTrackGenerator/BeatInfo'; // eslint-disable-line no-unused-vars
+import ValueOscilator from './ValueOscilator';
 
-function isNullOrUndefined<T>(obj?: T | null): boolean {
-  // null == undefined so this is true if obj = null or obj = undefined
-  return obj == null;
-}
+// tslint:disable:no-null-keyword
+export const isNullOrUndefined = <T>(
+  obj: T | null | undefined
+): obj is null | undefined => {
+  return typeof obj === 'undefined' || obj === null;
+};
+// tslint:enable:no-null-keyword
 
 type BeatChangedCallback = (beat: BeatInfo) => void;
 class AudioTrackPlayer {
@@ -18,6 +22,7 @@ class AudioTrackPlayer {
   private _loopHandle!: number;
   private _timeSinceLastBeat = 0;
   private _currentBeat: BeatInfo | null = null;
+  private _tempoOscilator = new ValueOscilator();
 
   private _onBeatChanged!: BeatChangedCallback;
 
@@ -94,13 +99,16 @@ class AudioTrackPlayer {
       return;
     }
 
+    this._tempoOscilator.tick(dt);
+    const tempoOscilationInterval = this._tempoOscilator.value / 60;
+
     this._timeSinceLastBeat += dt;
     const offset = this._currentBeat.offset;
     const time = this._currentBeat.time;
     const timeOffset = time * offset;
-    const interval = time + timeOffset;
+    const interval = time + timeOffset - tempoOscilationInterval;
     if (this._timeSinceLastBeat >= interval) {
-      this._timeSinceLastBeat -= time;
+      this._timeSinceLastBeat -= time - tempoOscilationInterval;
       let clip = this.getClipProvider(this._currentBeat.index).next();
 
       const skippingBeatChance = [0.0, 0.0, 0.2];
@@ -121,7 +129,7 @@ class AudioTrackPlayer {
 
   private nextBeat = () => {
     const nextBeat = this._trackGenerator.next();
-    this._currentBeat && this._onBeatChanged(this._currentBeat);
+    this._onBeatChanged && this._onBeatChanged(this._currentBeat);
     this._currentBeat = nextBeat;
   };
 
@@ -152,6 +160,8 @@ class AudioTrackPlayer {
 
   setBeatOffset = (index: number, val: number) =>
     this._trackGenerator.setOffset(index, val);
+  setTempoOscilation = (val: number) =>
+    this._tempoOscilator.setOscilationValue(val);
 }
 
 export default AudioTrackPlayer;
