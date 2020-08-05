@@ -1,71 +1,65 @@
 const { VTabsItems } = require("vuetify/lib");
 
 <template>
-  <v-app>
-    <v-main>
-      <v-container class="fill-height" fluid>
-        <v-row align="center" justify="center">
-          <v-col cols="12" sm="8" md="4">
-            <v-card class="elevation-12">
-              <!-- card text -->
-              <v-card-text>
-                <v-row>
-                  <v-col class="text-left">
-                    <span
-                      class="display-3 font-weight-light"
-                      v-text="tempo"
-                    ></span>
-                    <span class="subheading font-weight-light mr-1">BPM</span>
-                  </v-col>
-                  <v-col class="text-right">
-                    <v-btn color="primary" fab @click="onPlayClicked">
-                      <v-icon x-large>
-                        {{ isPlaying ? 'mdi-pause' : 'mdi-play' }}
-                      </v-icon>
-                    </v-btn>
-                  </v-col>
-                </v-row>
-                <v-slider v-model="tempo" min="60" max="360"></v-slider>
+  <v-main>
+    <v-container class="fill-height" fluid>
+      <v-row align="center" justify="center">
+        <v-col cols="12" sm="8" md="4">
+          <v-card class="elevation-12">
+            <v-toolbar>
+              <slot name="toolbar"></slot>
+            </v-toolbar>
+            <!-- card text -->
+            <v-card-text>
+              <v-row>
+                <v-col class="text-left">
+                  <span
+                    class="display-3 font-weight-light"
+                    v-text="tempo"
+                  ></span>
+                  <span class="subheading font-weight-light mr-1">BPM</span>
+                </v-col>
+                <v-col class="text-right">
+                  <v-btn color="primary" fab @click="onPlayClicked">
+                    <v-icon x-large>
+                      {{ isPlaying ? 'mdi-pause' : 'mdi-play' }}
+                    </v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
+              <v-slider v-model="tempo" min="60" max="360"></v-slider>
 
-                <p>Podbicie</p>
-                <v-slider v-model="shift" min="-100" max="100">
-                  <template v-slot:append> <span v-text="shift" /> % </template>
-                </v-slider>
+              <p>{{ lang['shift'] }}</p>
+              <v-slider v-model="shift" min="-100" max="100">
+                <template v-slot:append> <span v-text="shift" /> % </template>
+              </v-slider>
 
-                <p>Wahanie tempa</p>
-                <v-slider v-model="oscilation" min="0" max="100">
-                  <template v-slot:append>
-                    <span v-text="getOscilationStr()" />
-                  </template>
-                </v-slider>
-                <v-row>
-                  <v-col
-                    class="text-center"
-                    v-for="beat in 3"
-                    :key="'beat' + beat"
+              <p>{{ lang['oscilation'] }}</p>
+              <v-slider v-model="oscilation" min="0" max="100">
+                <template v-slot:append>
+                  <span v-text="getOscilationStr()" />
+                </template>
+              </v-slider>
+              <v-row>
+                <v-col
+                  class="text-center"
+                  v-for="beat in 3"
+                  :key="'beat' + beat"
+                >
+                  <v-avatar
+                    :color="beat - 1 == currentBeat ? 'accent' : 'primary'"
+                    size="86"
                   >
-                    <v-avatar
-                      :color="beat - 1 == currentBeat ? 'accent' : 'primary'"
-                      size="86"
-                    >
-                      <span class="display-3 font-weight-light"
-                        >{{ beat }}
-                      </span>
-                    </v-avatar>
-                  </v-col>
-                </v-row>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-main>
-    <v-bottom-navigation>
-      <v-card outlined color="rgb(0, 0, 0, 0)">
-        <v-card-text>Łukasz Nizik @ 2020</v-card-text>
-      </v-card>
-    </v-bottom-navigation>
-  </v-app>
+                    <span class="display-3 font-weight-light">{{ beat }} </span>
+                  </v-avatar>
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-main>
 </template>
 
 <script>
@@ -102,6 +96,9 @@ export default {
     },
     generator() {
       return this.player.generator;
+    },
+    lang() {
+      return this.$store.state.currentLanguage;
     },
   },
   mounted() {
