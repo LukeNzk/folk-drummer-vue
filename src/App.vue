@@ -10,7 +10,11 @@
     </Players>
     <v-bottom-navigation>
       <v-card outlined color="rgb(0, 0, 0, 0)">
-        <v-card-text>Łukasz Nizik @ 2020</v-card-text>
+        <v-card-text>
+          <v-btn icon href="https://www.facebook.com/bebnistapl"
+            ><v-icon>mdi-facebook</v-icon></v-btn
+          >
+        </v-card-text>
       </v-card>
     </v-bottom-navigation>
   </v-app>
