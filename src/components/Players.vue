@@ -9,7 +9,6 @@
           <v-tabs v-model="tab" grow>
             <v-tab>Mazurek</v-tab>
             <v-tab>Polka</v-tab>
-
             <v-tab-item>
               <Mazurek></Mazurek>
             </v-tab-item>

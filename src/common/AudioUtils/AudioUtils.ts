@@ -1,5 +1,6 @@
 class AudioUtils {
   private _context!: AudioContext;
+  private _resumed = false;
 
   private initialize = () => {
     this._context = new AudioContext();
@@ -39,7 +40,12 @@ class AudioUtils {
     return result;
   };
 
-  play = (buffer: AudioBuffer) => {
+  play = async (buffer: AudioBuffer) => {
+    if (!this._resumed) {
+      this._resumed = true;
+      await this._context.resume();
+    }
+
     const source = this.context.createBufferSource();
     source.buffer = buffer;
     source.connect(this.context.destination);
