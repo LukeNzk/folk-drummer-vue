@@ -1,7 +1,7 @@
 import AudioTrackGenerator from '@/common/AudioTrackGenerator';
 import ClipProvider from '@/common/ClipProvider';
 import { AudioClip } from '@/common/ClipProvider';
-import assets from '@/assets/sfx';
+import assets from '@/assets';
 import AudioUtils from '@/common/AudioUtils'; // eslint-disable-line no-unused-vars
 import BeatInfo from '@/common/AudioTrackGenerator/BeatInfo'; // eslint-disable-line no-unused-vars
 import ValueOscilator from './ValueOscilator';
