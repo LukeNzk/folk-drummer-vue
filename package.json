@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "deploy": "firebase deploy"
+    "deploy": "firebase deploy --only hosting:drum"
   },
   "dependencies": {
     "babel-eslint": "^10.1.0",
