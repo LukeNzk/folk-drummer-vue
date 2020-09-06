@@ -45,6 +45,7 @@ const { VTabsItems } = require("vuetify/lib");
 
 <script>
 import AudioTrackPlayer from '@/common/AudioTrackPlayer';
+import { AudioClips } from '@/common/ClipProvider';
 import AudioUtils from '@/common/AudioUtils';
 
 export default {
@@ -73,7 +74,11 @@ export default {
       return new AudioUtils();
     },
     player() {
-      return new AudioTrackPlayer(this.audioUtils);
+      const clips = new AudioClips(this.audioUtils);
+      clips.loadClips();
+
+      const player = new AudioTrackPlayer(this.audioUtils, clips.getClips());
+      return player;
     },
     generator() {
       return this.player.generator;

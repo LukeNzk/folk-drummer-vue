@@ -1,7 +1,5 @@
 import AudioTrackGenerator from '@/common/AudioTrackGenerator';
 import ClipProvider from '@/common/ClipProvider';
-import { AudioClip } from '@/common/ClipProvider';
-import assets from '@/assets';
 import AudioUtils from '@/common/AudioUtils'; // eslint-disable-line no-unused-vars
 import BeatInfo from '@/common/AudioTrackGenerator/BeatInfo'; // eslint-disable-line no-unused-vars
 import ValueOscilator from './ValueOscilator';
@@ -26,55 +24,16 @@ class AudioTrackPlayer {
 
   private _onBeatChanged!: BeatChangedCallback;
 
-  constructor(audio: AudioUtils | undefined) {
+  constructor(audio: AudioUtils | undefined, audioClips: Array<ClipProvider>) {
     this._trackGenerator = new AudioTrackGenerator();
     this._trackGenerator.beatsPerMeasure = 3;
     this._clips = [];
     this._audioUtils = audio as AudioUtils;
-    this.loadClips();
+    this._clips = audioClips;
   }
 
   setOnBeatChanged = (callback: BeatChangedCallback) => {
     this._onBeatChanged = callback;
-  };
-
-  private loadClips = async () => {
-    const sounds = await assets.sounds();
-
-    const loaders = Object.keys(sounds).map((key, index) => {
-      const files = sounds[key].files;
-      const result = this.loadClipFiles(files).then(clips => {
-        const clipProvider = new ClipProvider();
-        clips.forEach(clip => clipProvider.push(clip));
-        this._clips[index] = clipProvider;
-      });
-
-      return result;
-    });
-
-    await Promise.all(loaders);
-  };
-
-  private loadClipFiles = (files: Array<string>) => {
-    const result = new Promise<Array<AudioClip>>(resolve => {
-      const audioClips: Array<AudioClip> = [];
-
-      const onClipLoaded = (buffer: AudioBuffer) => {
-        const clip = new AudioClip();
-        clip.buffer = buffer;
-        audioClips.push(clip);
-        if (audioClips.length === files.length) {
-          // loaded all files
-          resolve(audioClips);
-        }
-      };
-
-      for (const file of files) {
-        this._audioUtils.loadClip(file).then(onClipLoaded);
-      }
-    });
-
-    return result;
   };
 
   private clear = () => {
