@@ -1,22 +1,12 @@
-export interface SfxAsset {
-  dir: string;
-  files: Array<string>;
-}
-export interface SfxCollection {
-  [category: string]: SfxAsset;
-}
+import SfxCollection from '@/common/SfxCollection';
 
-const prefixPath = './compressed/';
+const prefixPath = './';
 
 const sfxList: SfxCollection = {
-  skin: { dir: prefixPath + 'skin/', files: ['skin-1', 'skin-2', 'skin-3'] },
-  bells: {
-    dir: prefixPath + 'bells/',
-    files: ['bells-1', 'bells-2', 'bells-3', 'bells-4', 'bells-5'],
-  },
-  hybrid: {
-    dir: prefixPath + 'hybrid/',
-    files: ['hybrid-1', 'hybrid-2', 'hybrid-3', 'hybrid-4'],
+  skin: { dir: prefixPath, files: ['skinwt-01', 'skinwt-02', 'skinwt-03'] },
+  triangle: {
+    dir: prefixPath,
+    files: ['triangle-01', 'triangle-02', 'triangle-03', 'triangle-04'],
   },
 };
 
