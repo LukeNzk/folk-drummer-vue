@@ -45,10 +45,12 @@ const { VTabsItems } = require("vuetify/lib");
 
 <script>
 import AudioTrackPlayer from '@/common/AudioTrackPlayer';
-import { AudioClips } from '@/common/ClipProvider';
-import AudioUtils from '@/common/AudioUtils';
 
 export default {
+  props: {
+    audioClips: Object,
+    audioUtils: Object,
+  },
   data() {
     return {
       tempo: 190,
@@ -56,44 +58,47 @@ export default {
       oscilation: 0,
       isPlaying: false,
       currentBeat: -1,
+      player: null,
     };
   },
   watch: {
     tempo: function(val) {
-      this.generator.bpm = val;
+      this.getGenerator().bpm = val;
     },
     shift: function(val) {
-      this.generator.setOffset(1, val / 100.0);
+      this.getGenerator().setOffset(1, val / 100.0);
     },
     oscilation: function(val) {
       this.player.setTempoOscilation(val / 10.0);
     },
+    currentAudioClips: {
+      handler: function(val) {
+        this.player.setAudioClips(val.getClips());
+      },
+    },
   },
   computed: {
-    audioUtils() {
-      return new AudioUtils();
-    },
-    player() {
-      const clips = new AudioClips(this.audioUtils);
-      clips.loadClips();
-
-      const player = new AudioTrackPlayer(this.audioUtils, clips.getClips());
-      return player;
-    },
-    generator() {
-      return this.player.generator;
-    },
     lang() {
       return this.$store.state.currentLanguage;
     },
+    currentAudioClips() {
+      return this.audioClips;
+    },
   },
   mounted() {
-    this.generator.bpm = this.tempo;
-    this.generator.setOffset(1, this.shift / 100.0);
+    this.player = new AudioTrackPlayer(
+      this.audioUtils,
+      this.currentAudioClips.getClips()
+    );
+    this.getGenerator().bpm = this.tempo;
+    this.getGenerator().setOffset(1, this.shift / 100.0);
     this.player.setTempoOscilation(this.oscilation / 10.0);
     this.player.setOnBeatChanged(this.onBeatChanged);
   },
   methods: {
+    getGenerator() {
+      return this.player.generator;
+    },
     onPlayClicked() {
       this.isPlaying = !this.isPlaying;
       if (this.isPlaying) {

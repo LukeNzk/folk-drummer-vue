@@ -2,6 +2,9 @@
     "data": {
         "tempo": "Tempo",
         "shift": "Second beat shift",
-        "oscilation": "Tempo fluctuation"
+        "oscilation": "Tempo fluctuation",
+        "drumType": "Drum type",
+        "frame": "Frame drum",
+        "baraban": "Baraban"
     }
 }

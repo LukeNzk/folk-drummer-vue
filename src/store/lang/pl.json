@@ -2,6 +2,9 @@
     "data": {
         "tempo": "Tempo",
         "shift": "Podbicie",
-        "oscilation": "Wahanie tempa"
+        "oscilation": "Wahanie tempa",
+        "drumType": "Rodzaj bębna",
+        "frame": "Bęben obręczowy",
+        "baraban": "Baraban"
     }
 }

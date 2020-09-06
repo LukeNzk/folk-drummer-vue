@@ -1,8 +1,7 @@
 import AudioUtils from '@/common/AudioUtils'; // eslint-disable-line no-unused-vars
 import ClipProvider from '@/common/ClipProvider';
+import SfxCollection from '@/common/SfxCollection';
 import { AudioClip } from '@/common/ClipProvider';
-
-import assets from '@/assets';
 
 class AudioClips {
   private _clips: Array<ClipProvider>;
@@ -17,8 +16,8 @@ class AudioClips {
     return this._clips;
   };
 
-  loadClips = async () => {
-    const sounds = await assets.sounds();
+  loadClips = async (sfxBank: any) => {
+    const sounds = await sfxBank.sounds();
 
     const loaders = Object.keys(sounds).map((key, index) => {
       const files = sounds[key].files;

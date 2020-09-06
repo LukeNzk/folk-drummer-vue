@@ -32,6 +32,10 @@ class AudioTrackPlayer {
     this._clips = audioClips;
   }
 
+  setAudioClips(clips: Array<ClipProvider>) {
+    this._clips = clips;
+  }
+
   setOnBeatChanged = (callback: BeatChangedCallback) => {
     this._onBeatChanged = callback;
   };
@@ -48,7 +52,11 @@ class AudioTrackPlayer {
     if (beatIndex === 0) {
       return this._clips[0];
     } else {
-      const r = Math.floor(Math.random() + 1);
+      const sideBeatClipsCount = this._clips.length - 1;
+      let r = Math.random() * sideBeatClipsCount;
+      r = r * Math.pow(r / sideBeatClipsCount, 0.5);
+      r = Math.floor(r) + 1;
+
       return this._clips[r];
     }
   };
@@ -70,7 +78,7 @@ class AudioTrackPlayer {
       this._timeSinceLastBeat -= time - tempoOscilationInterval;
       let clip = this.getClipProvider(this._currentBeat.index).next();
 
-      const skippingBeatChance = [0.0, 0.0, 0.2];
+      const skippingBeatChance = [0.05, 0.0, 0.1];
       const skippingBeatRnd = Math.random();
       const skipBeat =
         skippingBeatRnd < skippingBeatChance[this._currentBeat.index];
