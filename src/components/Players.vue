@@ -3,9 +3,9 @@
     <v-container class="fill-height" fluid>
       <v-row align="center" justify="center">
         <v-col cols="12" sm="8" md="4">
-          <v-card>
+          <v-card class="pa-2 mb-2">
             <slot name="toolbar"></slot>
-            <v-select
+            <v-select              
               :label="lang['drumType']"
               v-model="drumType"
               item-value="id"
