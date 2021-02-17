@@ -14,6 +14,7 @@
           <v-btn icon href="https://www.facebook.com/bebnistapl"
             ><v-icon>mdi-facebook</v-icon></v-btn
           >
+          <span id="version">v 1.1</span>
         </v-card-text>
       </v-card>
     </v-bottom-navigation>

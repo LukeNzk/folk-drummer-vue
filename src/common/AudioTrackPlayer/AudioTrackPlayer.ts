@@ -78,7 +78,7 @@ class AudioTrackPlayer {
       this._timeSinceLastBeat -= time - tempoOscilationInterval;
       let clip = this.getClipProvider(this._currentBeat.index).next();
 
-      const skippingBeatChance = [0.05, 0.0, 0.1];
+      const skippingBeatChance = [0.0, 0.0, 0.0];
       const skippingBeatRnd = Math.random();
       const skipBeat =
         skippingBeatRnd < skippingBeatChance[this._currentBeat.index];
